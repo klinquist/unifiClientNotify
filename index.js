@@ -1,4 +1,4 @@
-const location = 'default';
+const location = 'geekflat';
 
 let locations;
 try {
@@ -111,9 +111,12 @@ const checkForClients = (clients, cb) => {
 
 const notifyOfNewClient = (client, cb) => {
     log(`New client discovered: ${client.name || client.hostname}, mac: ${client.mac}, oui: ${client.oui}`);
+    let title = 'New client detected';
+    if (client.essid) title += ` on SSID ${client.essid}`;
+    const clientMsg = `Hostname: ${client.name || client.hostname}, mac: ${client.mac} oui: ${client.oui}`;
     var msg = {
-        message: `Hostname: ${client.name || client.hostname}, mac: ${client.mac} oui: ${client.oui}`,
-        title: `New client detected on network ${client.network}`,
+        message: clientMsg,
+        title: title,
         sound: locations[location].pbNotificationSound,
         priority: 1
     };
