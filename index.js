@@ -1,4 +1,4 @@
-const location = 'geekflat';
+const location = 'default';
 
 let locations;
 try {
