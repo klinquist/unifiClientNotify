@@ -15,9 +15,9 @@ const checkEverySeconds = 30;
 
 
 
+
 const unifi = require('node-unifi');
 const async = require('async');
-const lodash = require('lodash');
 const Redis = require('ioredis');
 const redisConfig = {
     host: locations[location].redisIP,
@@ -39,6 +39,16 @@ const log = (msg) => {
     console.log(`${new Date().toISOString()} ${msg}`);
 };
 
+
+const countByNetwork = (clients) => {
+    const returnObj = {};
+    for (let i = 0; i < clients.length; i++){
+        if (!clients[i].essid) clients[i].essid = 'Wired';
+        if (!returnObj[clients[i].essid]) returnObj[clients[i].essid] = 0;
+        returnObj[clients[i].essid]++;
+    }
+    return returnObj;
+};
 
 let defaultSite;
 const login = (cb) => {
@@ -81,8 +91,9 @@ const getClients = (cb) => {
             sendErrorAndExit('Error getting devices', err);
         } else {
             const clients = client_data[0];
-            const clientsByNetwork = lodash.countBy(clients, 'network');
-            log('Clients by network: ' + prettyjson.render(clientsByNetwork));
+            const clientsByNetwork = countByNetwork(clients);
+            log('Clients by network:');
+            log(prettyjson.render(clientsByNetwork));
             return cb(null, clients);
         }
     });
@@ -94,6 +105,13 @@ const checkForClients = (clients, cb) => {
     let newClients = false;
     async.each(clients, (client, cb) => {
         redis.setnx(client.mac, JSON.stringify(client), (err, res) => {
+            if (err) {
+                log('Redis error ' + err);
+                return cb(err);
+            }
+            if (locations[location].forgetAfterDays && locations[location].forgetAfterDays !== -1) {
+                redis.expire(client.mac, locations[location].forgetAfterDays*86400);
+            }
             if (res == 1) {
                 newClients = true;
                 notifyOfNewClient(client, cb);

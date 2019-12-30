@@ -8,6 +8,7 @@
         "pbNotificationSound":"magic",                  //Pushbullet default notification sound
         "pbErrorSound":"magic",                         //Pushbullet error sound
         "ubntLogin": "your@email.com",                  //Unifi/Cloud Key login (email)
-        "ubntPassword": "sdfsdfds"                      //Unifi/Cloud Key Password
+        "ubntPassword": "sdfsdfds",                     //Unifi/Cloud Key Password
+        "forgetAfterDays":7                             //Forget about a client if we haven't seen it for this many days.  Use -1 to remember clients forever.
     }
 }
