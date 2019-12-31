@@ -55,13 +55,7 @@ const login = (cb) => {
     async.series([
         (cb) => {
             log('Logging in...');
-            controller.login(locations[location].ubntLogin, locations[location].ubntPassword, (err) => {
-                if (err) {
-                    sendErrorAndExit('Error logging in', err);
-                } else {
-                    return cb();
-                }
-            });
+            loginToController(cb);
         },
         (cb) => {
             log('Getting network sites...');
@@ -88,7 +82,10 @@ const login = (cb) => {
 const getClients = (cb) => {
     controller.getClientDevices(defaultSite, (err, client_data) => {
         if (err) {
-            sendErrorAndExit('Error getting devices', err);
+            log('Error getting devices, trying to log back in');
+            loginToController(() => {
+                getClients(cb);
+            });
         } else {
             const clients = client_data[0];
             const clientsByNetwork = countByNetwork(clients);
@@ -99,6 +96,16 @@ const getClients = (cb) => {
     });
 };
 
+
+const loginToController = (cb) => {
+    controller.login(locations[location].ubntLogin, locations[location].ubntPassword, (err) => {
+        if (err) {
+            sendErrorAndExit('Error logging in', err);
+        } else {
+            return cb();
+        }
+    });
+};
 
 
 const checkForClients = (clients, cb) => {
