@@ -87,7 +87,11 @@ const getClients = (cb) => {
                 getClients(cb);
             });
         } else {
-            const clients = client_data[0];
+            const clients = client_data && client_data[0];
+            if (!clients || clients.length == 0) {
+                log('Error getting devices, trying again');
+                return getClients(cb);
+            }
             const clientsByNetwork = countByNetwork(clients);
             log('Clients by network:');
             log(prettyjson.render(clientsByNetwork));
