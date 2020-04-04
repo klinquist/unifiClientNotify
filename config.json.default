@@ -3,6 +3,7 @@
         "redisIP": "127.0.0.1",                         //Redis server IP address, 127.0.0.1 for localhost
         "redisPassword":null,                           //If you have redis password protected, enter the password here. Else, make sure "protected-mode off" in redis.conf
         "ubntIP": "192.168.0.10",                       //Unifi/Cloud Key IP Address
+        "ubntPort": 443                                 //Typically 443 for UDM/UDMPro, 8443 for cloud keys
         "pbUser": "xxxxxx",                             //Pushbullet user token
         "pbToken": "xxxxx",                             //Pushbullet application token,
         "pbNotificationSound":"magic",                  //Pushbullet default notification sound

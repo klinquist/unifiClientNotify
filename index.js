@@ -26,7 +26,7 @@ const redisConfig = {
 if (locations[location].redisPassword) redisConfig.password = locations[location].redisPassword;
 const redis = new Redis(redisConfig);
 const prettyjson = require('prettyjson');
-const controller = new unifi.Controller(locations[location].ubntIP, 8443);
+const controller = new unifi.Controller(locations[location].ubntIP, locations[location].ubntPort);
 const Push = require('pushover-notifications');
 const p = new Push({
     user: locations[location].pbUser,

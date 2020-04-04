@@ -11,7 +11,7 @@
   "dependencies": {
     "async": "^3.1.0",
     "ioredis": "^4.14.1",
-    "node-unifi": "^1.2.2",
+    "node-unifi": "git+https://github.com/klinquist/node-unifi.git#unifios",
     "prettyjson": "^1.2.1",
     "pushover-notifications": "^1.2.1"
   }
